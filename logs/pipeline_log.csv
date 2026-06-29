@@ -1,0 +1,12 @@
+﻿Paso,Descripción,Filas,Nulos,Retención (%)
+0,Dataset original,8160,753,100.0
+1,Conservar la primera aparición de cada user_id,8000,753,98.04
+2,"Estandarizar categorías de plan, país y género",8000,753,98.04
+3,Marcar edades fuera del rango 13-100 como faltantes,8000,873,98.04
+4,Imputar edad con mediana global (33),8000,753,98.04
+5,Marcar tiempos mensuales imposibles como faltantes,8000,833,98.04
+6,Imputar minutos con mediana por plan,8000,560,98.04
+7,"Marcar tickets -1, 99 y 150 como faltantes",8000,656,98.04
+8,Imputar tickets con mediana global (1),8000,560,98.04
+9,Etiquetar género faltante como No informado,8000,320,98.04
+10,"Convertir fechas válidas y conservar como faltantes las ambiguas, inválidas o futuras",8000,501,98.04
