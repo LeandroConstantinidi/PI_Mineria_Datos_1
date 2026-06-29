@@ -13,7 +13,7 @@
 | **Fuente**               | Dataset provisto por la cátedra                                    |
 | **Fecha de elaboración** | Junio de 2026                                                      |
 
-### Enlaces públicos
+## Enlaces públicos
 
 * [Repositorio público de GitHub](https://github.com/LeandroConstantinidi/PI_Mineria_Datos_1)
 * [Aplicación pública en Streamlit](https://pi-mineria-datos-constantinidi-thir-2026.streamlit.app/)
@@ -22,21 +22,19 @@
 
 ## Objetivo del proyecto
 
-El objetivo es desarrollar un análisis reproducible y comunicable sobre usuarios de una plataforma de streaming. El trabajo comprende inspección inicial, evaluación de calidad, limpieza, preparación, análisis exploratorio y reducción de dimensionalidad mediante PCA.
+El objetivo del proyecto es desarrollar un proceso reproducible de inspección, preparación, análisis exploratorio y reducción de dimensionalidad sobre un dataset de usuarios de una plataforma de streaming.
 
-Las decisiones se justifican con evidencia obtenida del dataset y se registra el impacto de cada transformación. El alcance es descriptivo y exploratorio; no incluye modelos predictivos ni permite establecer relaciones causales.
+El alcance es descriptivo y exploratorio. No se desarrollan modelos predictivos ni se establecen relaciones causales.
 
 ## Dataset
 
-El archivo original contiene 8.160 filas y 8 variables relacionadas con identificación, edad, plan de suscripción, minutos mensuales de visualización, país, género favorito, fecha del último ingreso y tickets de soporte.
+El archivo original contiene información sobre usuarios, edad, plan de suscripción, tiempo mensual de visualización, país, género favorito, fecha del último ingreso y tickets de soporte.
 
-Se detectaron valores faltantes, identificadores duplicados, categorías escritas de distintas formas, valores numéricos incompatibles y fechas ambiguas, imposibles o futuras.
-
-El archivo original se conserva sin modificaciones en:
+El dataset original se conserva sin modificaciones en:
 
 [`data/raw/streaming_users_dirty.json`](data/raw/streaming_users_dirty.json)
 
-El dataset procesado contiene 8.000 usuarios únicos y está disponible en:
+El dataset preparado para el análisis se encuentra en:
 
 [`data/processed/streaming_users_clean.csv`](data/processed/streaming_users_clean.csv)
 
@@ -70,84 +68,71 @@ PI_Mineria_Datos_1/
     └── pipeline_log.csv
 ```
 
-## Preparación y calidad de datos
+## Desarrollo del análisis
 
-La preparación se desarrolló en:
+El trabajo se organizó en cinco notebooks ejecutados y documentados.
+
+### 1. Inspección inicial
+
+La revisión de la estructura, los tipos de datos, los valores faltantes, los duplicados y las inconsistencias iniciales se encuentra en:
+
+[`01_inspeccion_inicial.ipynb`](notebooks/01_inspeccion_inicial.ipynb)
+
+### 2. Calidad y limpieza de datos
+
+Las reglas de validación, normalización, tratamiento de valores incompatibles, imputaciones y generación del dataset procesado se documentan en:
 
 [`02_calidad_y_limpieza.ipynb`](notebooks/02_calidad_y_limpieza.ipynb)
 
-Las principales decisiones fueron:
+### 3. Análisis exploratorio
 
-* Conservar la primera aparición de cada identificador repetido.
-* Estandarizar planes, países y géneros mediante diccionarios explícitos.
-* Transformar los valores numéricos incompatibles en faltantes antes de imputarlos.
-* Imputar edades y tickets mediante medianas justificadas.
-* Imputar el consumo mediante la mediana correspondiente a cada plan.
-* Mantener como desconocidas las fechas ambiguas, imposibles o futuras, para no inventar información.
-
-Cada transformación y su impacto quedaron registrados en:
-
-[`logs/pipeline_log.csv`](logs/pipeline_log.csv)
-
-## Resumen del análisis exploratorio
-
-El análisis completo se encuentra en:
+El análisis univariado, bivariado y multivariado se desarrolla en:
 
 [`03_eda.ipynb`](notebooks/03_eda.ipynb)
 
-Los principales resultados fueron:
+Las visualizaciones seleccionadas para público general están disponibles en la sección EDA de la aplicación Streamlit.
 
-* El plan Básico concentra el 45,0 % de los usuarios.
-* El plan Estándar representa el 35,2 %.
-* El plan Premium representa el 19,8 %.
-* El consumo mensual presenta una media de 800,9 minutos y una mediana de 770,8 minutos.
-* Las medianas de consumo aumentan de Básico a Estándar y Premium.
-* La edad no muestra una relación lineal relevante con los minutos mensuales.
-* El patrón Premium > Estándar > Básico se mantiene en los siete países.
+### 4. Reducción de dimensionalidad
 
-El plan de suscripción presenta la asociación descriptiva más clara con el consumo mensual. Sin embargo, los resultados describen asociaciones y no permiten demostrar causalidad.
-
-## Reducción de dimensionalidad
-
-El procedimiento se documenta en:
+El escalamiento de variables y el análisis de componentes principales se documentan en:
 
 [`04_pca.ipynb`](notebooks/04_pca.ipynb)
 
-PCA se aplicó a las siguientes variables:
+Las visualizaciones seleccionadas para comunicar el procedimiento están disponibles en la sección PCA de la aplicación Streamlit.
 
-* Edad.
-* Minutos mensuales de visualización.
-* Tickets de soporte.
-* Días desde el último ingreso.
+### 5. Conclusiones
 
-Se utilizó `StandardScaler` porque las variables poseen unidades y rangos diferentes.
+Las conclusiones, limitaciones y recomendaciones se desarrollan en:
 
-Las dos primeras componentes explican el 50,45 % de la variabilidad y las tres primeras explican el 75,32 %. Para superar el 80 % se necesitan las cuatro componentes.
+[`05_conclusiones.ipynb`](notebooks/05_conclusiones.ipynb)
 
-PC1 combina principalmente edad, recencia y consumo, mientras que PC2 está dominada por los tickets de soporte.
+La síntesis formal del proyecto se encuentra en:
 
-PCA permitió comprobar que las variables aportan información relativamente diferente y que no conviene forzar una reducción a solamente dos o tres dimensiones.
+[`reports/informe_final.pdf`](reports/informe_final.pdf)
 
-## Visualización interactiva
+## Trazabilidad del proceso ETL
 
-La aplicación comunica los resultados principales para público general y está disponible en:
+Las transformaciones realizadas durante la preparación de los datos y su impacto sobre el dataset se registraron en:
 
-[Aplicación pública en Streamlit](https://pi-mineria-datos-constantinidi-thir-2026.streamlit.app/)
+[`logs/pipeline_log.csv`](logs/pipeline_log.csv)
 
-La página EDA contiene exactamente cinco visualizaciones:
+Este archivo permite consultar la secuencia de decisiones aplicada durante el proceso de limpieza y preparación.
 
-* Dos visualizaciones univariadas.
-* Dos visualizaciones bivariadas.
-* Una visualización multivariada.
+## Aplicación interactiva
 
-La página PCA presenta dos visualizaciones:
+La aplicación pública permite consultar:
 
-* Varianza explicada por componente.
-* Contribución de las variables a PC1 y PC2.
+* La descripción del proyecto.
+* El dataset procesado y su calidad.
+* Las visualizaciones del análisis exploratorio.
+* El análisis de componentes principales.
+* Las conclusiones y limitaciones.
 
-La evidencia técnica completa permanece disponible en los notebooks, el dataset procesado y el registro ETL.
+Acceso público:
 
-## Cómo ejecutar localmente
+[Aplicación en Streamlit Cloud](https://pi-mineria-datos-constantinidi-thir-2026.streamlit.app/)
+
+## Cómo ejecutar la aplicación localmente
 
 ### 1. Clonar el repositorio
 
@@ -168,10 +153,16 @@ py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-En caso de que PowerShell bloquee la activación, ejecutar primero:
+Si PowerShell bloquea la activación, ejecutar primero:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+```
+
+Luego activar nuevamente:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
 ### 4. Instalar las dependencias
@@ -181,7 +172,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### 5. Ejecutar la aplicación
+### 5. Ejecutar Streamlit
 
 ```powershell
 python -m streamlit run app/Home.py
@@ -193,23 +184,18 @@ La aplicación local estará disponible en:
 http://localhost:8501
 ```
 
-Para detener la aplicación se debe presionar:
+Para detener la aplicación:
 
 ```text
 Ctrl + C
 ```
 
-## Conclusiones
+## Consulta de resultados
 
-El proceso permitió transformar una base con problemas de calidad en un dataset reproducible de 8.000 usuarios únicos.
+El README funciona como guía de navegación y reproducción del proyecto. Los resultados y sus interpretaciones deben consultarse en los siguientes entregables:
 
-El plan de suscripción presenta las diferencias descriptivas más claras en el consumo mensual. La edad aislada no permite caracterizar el nivel de visualización y el país no modifica el patrón general entre planes.
-
-PCA mostró que las variables numéricas contienen información relativamente poco redundante y que no conviene reemplazarlas por solamente dos o tres componentes.
-
-Las conclusiones se limitan al dataset analizado y no permiten inferir causalidad ni generalizar automáticamente los resultados a otras plataformas.
-
-El desarrollo detallado de las conclusiones se encuentra en:
-
+* [Aplicación pública en Streamlit](https://pi-mineria-datos-constantinidi-thir-2026.streamlit.app/)
+* [`03_eda.ipynb`](notebooks/03_eda.ipynb)
+* [`04_pca.ipynb`](notebooks/04_pca.ipynb)
 * [`05_conclusiones.ipynb`](notebooks/05_conclusiones.ipynb)
-* [`Informe final en PDF`](reports/informe_final.pdf)
+* [Informe final en PDF](reports/informe_final.pdf)
